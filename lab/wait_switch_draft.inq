@@ -1,0 +1,21 @@
+wait {
+    result queue.count('all'): (count) => {
+        _all = count
+    };
+
+    result queue.count('active'): (count) => {
+        _active = count
+    };
+
+    result queue.count('failed'): (count) => {
+        _failed = count
+    };
+
+    result store.recordCount(): (count) => {
+        _records = count
+    };
+
+    any: () => {
+        updateInfo()
+    };
+}

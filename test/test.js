@@ -246,10 +246,39 @@ function square(n, cb) {
     setTimeout(cb.bind(0, null, n * n), Math.floor(Math.random() * 500) + 500)
 }
 
+function getPromise(success, value, error) {
+    var p = new Promise(function(resolve, reject) {
+        setTimeout(resolve.bind(null, 42), 2500)
+    });
+
+    p.then(success, error)
+
+    return p;
+}
+
 $(function* () {
-    console.log(yield* (yield* (yield* nums()).$.map(square)).$.filterSeries(function (item, callback) {
-        callback(null, item <= 100)
-    }))
+    getPromise.$.wrap(0, 2, 'hey!')(function (err, res) {
+        console.log('done');
+        console.log(err, res);
+    })
+
+//    console.log(yield* $.series([
+//        0,
+//        square.$(1),
+//        square.$(2),
+//        square.$(3),
+//        square.$(4),
+//        square.$(5),
+//        'end'
+//    ]))
+//
+//    console.log(yield* $.series(42))
+//    console.log(yield* $.series({ a: 1, b: 2 }))
+//    console.log(yield* $.series(true))
+
+//    console.log(yield* (yield* (yield* nums()).$.map(square)).$.filterSeries(function (item, callback) {
+//        callback(null, item <= 100)
+//    }))
 })
 
 //function* test() {

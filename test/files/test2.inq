@@ -1,0 +1,62 @@
+var fs = require('fs'),
+    request = require('request'),
+    data = require('data');
+
+function getUsername(id, callback) {
+    var query = new data.Query("SELECT * FROM users WHERE id = " + id);
+    query.execute(function(err, result) {
+        if(err) {
+            callback(err);
+        }
+        else {
+            callback(null, result.username)
+        }
+    });
+}
+
+function saveFile(name, data, callback) {
+    var filename = "./" + name + ".txt";
+    fs.writeFile(filename, data, function(err) {
+        if(err) {
+            callback(err)
+        }
+        else {
+            callback(null, filename)
+        }
+    });
+}
+
+function getData(q, callback) {
+    var query = "http://www.google.com?q=" + q;
+    request.get(query, callback);
+}
+
+function saveResultsForUser(id, callback) {
+    getUsername(id, function(err, username) {
+        if(err) {
+            callback(err)
+        }
+        else {
+            getData(username, function(err, result) {
+                if(err) {
+                    callback(err)
+                }
+                else {
+                    saveFile(username, result, callback)
+                }
+            })
+        }
+    })
+}
+
+function async saveResultsForUserAsync(id) {
+    var username = await getUsername(id);
+    var result = await getData(username);
+    var filename = await saveFile(username, result);
+    return filename;
+}
+
+async {
+    console.log("START");
+    console.log(await saveResultsForUserAsync(1234)); // Output: './<username>.txt'
+}
