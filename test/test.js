@@ -258,9 +258,9 @@ function getPromise(success, value, error) {
 
 $(function* () {
     getPromise.$.wrap(0, 2, 'hey!')(function (err, res) {
-        console.log('done');
-        console.log(err, res);
-    })
+    console.log('done');
+    console.log(err, res);
+})
 
 //    console.log(yield* $.series([
 //        0,

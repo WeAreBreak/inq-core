@@ -1,13 +1,15 @@
 /* WARNING: GENERATED CODE. DO NOT MODIFY THIS FILE!   
    InqScript to JavaScript Compiler v0.3 */
 
+$ = 'before'
+
 var inq = require('../'),
     fs = require("fs"),
     path = require("path");
 
-//function readFile(file, callback) {
-//    fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback);
-//}
+function readFile(file, callback) {
+    fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback);
+}
 //
 //inq(function* () {
 //    var start = +new Date,
@@ -28,9 +30,10 @@ var readFile = function(file, callback) { console.log(file, (+new Date - start) 
     encoding: "utf8"
 }, callback) }, 500) };
 
-inq(function* () {
-    var list = files.map(function(file) { return readFile.$(file) });
-    yield list;
+//$.noConflict()
+
+$(function* () {
+    yield* files.inq.map(readFile)
     console.log((+new Date - start) / 1000);
 });
 
