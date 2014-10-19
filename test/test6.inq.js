@@ -32,10 +32,16 @@ var readFile = function(file, callback) { console.log(file, (+new Date - start) 
 
 //$.noConflict()
 
-$(function* () {
-    yield* files.inq.map(readFile)
+var p = $(function* () {
+    yield* files.inq.mapSeries(readFile)
     console.log((+new Date - start) / 1000);
+}).error(function (err) {
+    console.log('ERR', err);
 });
+
+setTimeout(function () {
+    p.reject('meguntam')
+}, 1400)
 
 //////////////////////////////////////////////////////////////////////////////
 
