@@ -25,23 +25,35 @@ function readFile(file, callback) {
 
 var start = +new Date;
 
-var files = [ "app.js", "chat.cs", "test.js", "test1.ces", "test2.inq", "test3.inq" ];
-var readFile = function(file, callback) { console.log(file, (+new Date - start) / 1000); return setTimeout(function() { return fs.readFile(path.resolve(__dirname, "./files/" + file), {
-    encoding: "utf8"
-}, callback) }, 500) };
+var files = [ "fake.txt", "app.js", "chat.cs", "test.js", "_chat.cs", "test1.ces", "test2.inq", "_test2.inq", "test3.inq", "nonexisting.js" ];
+var readFile = function(file, callback) {
+    console.log(file, (+new Date - start) / 1000)
+
+    return setTimeout(function() {
+        return fs.readFile(file, { encoding: "utf8" }, callback)
+    }, 500)
+};
 
 //$.noConflict()
 
 var p = $(function* () {
+//    var self = this
+
+//    setTimeout(function () {
+//        self.reject('en elobb untam meg')
+//    }, 1200)
+
+    files = yield* files.map(function (file) { return path.resolve(__dirname, 'files/' + file) }).$.filter(fs.exists)
+
     yield* files.inq.mapSeries(readFile)
     console.log((+new Date - start) / 1000);
 }).error(function (err) {
     console.log('ERR', err);
 });
 
-setTimeout(function () {
-    p.reject('meguntam')
-}, 1400)
+//setTimeout(function () {
+//    p.reject('meguntam')
+//}, 1400)
 
 //////////////////////////////////////////////////////////////////////////////
 
