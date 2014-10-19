@@ -7,9 +7,9 @@ var inq = require('../'),
     fs = require("fs"),
     path = require("path");
 
-function readFile(file, callback) {
-    fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback);
-}
+//function readFile(file, callback) {
+//    fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback);
+//}
 //
 //inq(function* () {
 //    var start = +new Date,
@@ -25,31 +25,54 @@ function readFile(file, callback) {
 
 var start = +new Date;
 
-var files = [ "fake.txt", "app.js", "chat.cs", "test.js", "_chat.cs", "test1.ces", "test2.inq", "_test2.inq", "test3.inq", "nonexisting.js" ];
-var readFile = function(file, callback) {
-    console.log(file, (+new Date - start) / 1000)
-
-    return setTimeout(function() {
-        return fs.readFile(file, { encoding: "utf8" }, callback)
-    }, 500)
-};
+//var files = [ "fake.txt", "app.js", "chat.cs", "test.js", "_chat.cs", "test1.ces", "test2.inq", "_test2.inq", "test3.inq", "nonexisting.js" ];
+//var readFile = function(file, callback) {
+//    console.log(file, (+new Date - start) / 1000)
+//
+//    return setTimeout(function() {
+//        return fs.readFile(file, { encoding: "utf8" }, callback)
+//    }, 500)
+//};
 
 //$.noConflict()
 
-var p = $(function* () {
-//    var self = this
+var wrap_test_1 = (function (val1, error, val2, success, val3) {
+    success(val1 + val2 + val3)
+} ).$.wrap(3, 1, 1, 2, 3)(function (err, res) {
+    console.log('err', err, '\nres', res);
+})
 
-//    setTimeout(function () {
-//        self.reject('en elobb untam meg')
-//    }, 1200)
+var wrap_test_2 = (function (val1, done, val2, val3) {
+    done(null, val1 + val2 + val3)
+} ).$.task(1, 1, 2, 3)(function (err, res) {
+    console.log('err', err, '\nres', res);
+})
 
-    files = yield* files.map(function (file) { return path.resolve(__dirname, 'files/' + file) }).$.filter(fs.exists)
+var wrap_test_3 = setTimeout.$.task(0, 1000)(function () {
+    console.log('delayed!');
+})
 
-    yield* files.inq.mapSeries(readFile)
-    console.log((+new Date - start) / 1000);
-}).error(function (err) {
-    console.log('ERR', err);
-});
+//var p = $(function* () {
+////    var self = this
+//
+////    setTimeout(function () {
+////        self.reject('en elobb untam meg')
+////    }, 1200)
+//
+//    files = yield* files.map(function (file) { return path.resolve(__dirname, 'files/' + file) }).$.filter(fs.exists)
+//
+//    yield* $.series([
+//        $.wait(500),
+//        $.wait(500),
+//        $.wait(500),
+//        $.wait(500)
+//    ])
+//
+//    yield* files.inq.mapSeries(readFile)
+//    console.log((+new Date - start) / 1000);
+//}).error(function (err) {
+//    console.log('ERR', err);
+//});
 
 //setTimeout(function () {
 //    p.reject('meguntam')
