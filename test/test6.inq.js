@@ -38,18 +38,32 @@ var start = +new Date;
 
 var wrap_test_1 = (function (val1, error, val2, success, val3) {
     success(val1 + val2 + val3)
-} ).$.wrap(3, 1, 1, 2, 3)(function (err, res) {
+}).$.wrap(3, 1, 1, 2, 3)(function (err, res) {
     console.log('err', err, '\nres', res);
 })
 
 var wrap_test_2 = (function (val1, done, val2, val3) {
     done(null, val1 + val2 + val3)
-} ).$.task(1, 1, 2, 3)(function (err, res) {
+}).$.task(1, 1, 2, 3)(function (err, res) {
     console.log('err', err, '\nres', res);
 })
 
-var wrap_test_3 = setTimeout.$.task(0, 1000)(function () {
+var wrap_test_3 = setTimeout.inq.task(0, 4000)(function () {
     console.log('delayed!');
+})
+
+var errors = 0
+
+function error(callback) {
+    console.log('- try', errors);
+
+    setTimeout(function () {
+        callback(++errors)
+    }, 500)
+}
+
+var wrap_test_4 = error.inq().retry(5)(function (err, res) {
+    console.log('err', err, '\nres', res);
 })
 
 //var p = $(function* () {
