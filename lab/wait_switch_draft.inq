@@ -1,3 +1,4 @@
+#ifdef INQ_FUTURES
 wait {
     result queue.count('all'): (count) => {
         _all = count
@@ -19,3 +20,4 @@ wait {
         updateInfo()
     };
 }
+#endif
