@@ -62,7 +62,7 @@ function error(callback) {
     }, 500)
 }
 
-var wrap_test_4 = error.inq().retry(5)(function (err, res) {
+var wrap_test_4 = error.inq().retry(5).fallback('ok')(function (err, res) {
     console.log('err', err, '\nres', res);
 })
 
