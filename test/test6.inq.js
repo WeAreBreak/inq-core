@@ -108,6 +108,8 @@ var p = $(function* () {
         getRes.$()
     ])
 
+    console.log(yield* $.series(i++));
+
     return yield* $.series([
         getRes.$(),
         getRes.$(),
