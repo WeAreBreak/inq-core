@@ -23,7 +23,8 @@ var inq = require('../'),
 
 //////////////////////////////////////////////////////////////////////////////
 
-var start = +new Date;
+var start = +new Date,
+    cl    = console.log.bind(console.log);
 
 //var files = [ "fake.txt", "app.js", "chat.cs", "test.js", "_chat.cs", "test1.ces", "test2.inq", "_test2.inq", "test3.inq", "nonexisting.js" ];
 //var readFile = function(file, callback) {
@@ -36,35 +37,48 @@ var start = +new Date;
 
 //$.noConflict()
 
-var wrap_test_1 = (function (val1, error, val2, success, val3) {
-    success(val1 + val2 + val3)
-}).$.wrap(3, 1, 1, 2, 3)(function (err, res) {
-    console.log('err', err, '\nres', res);
-})
+//var wrap_test_1 = (function (val1, error, val2, success, val3) {
+//    success(val1 + val2 + val3)
+//}).$.wrap(3, 1, 1, 2, 3)(function (err, res) {
+//    cl('err', err, '\nres', res);
+//})
+//
+//var wrap_test_2 = (function (val1, done, val2, val3) {
+//    done(null, val1 + val2 + val3)
+//}).$.task(1, 1, 2, 3)(function (err, res) {
+//    cl('err', err, '\nres', res);
+//})
+//
+//var wrap_test_3 = setTimeout.inq.task(0, 4000)(function () {
+//    cl('delayed!');
+//})
+//
+//var errors = 0
+//
+//function error(callback) {
+//    cl('- try', errors);
+//
+//    setTimeout(function () {
+//        callback(++errors)
+//    }, 500)
+//}
+//
+//$(function* wrap_test_4() {
+//    cl('res', yield error.inq().retry(5).fallback('ok'))
+//}).error(cl.bind(cl, 'err'))
 
-var wrap_test_2 = (function (val1, done, val2, val3) {
-    done(null, val1 + val2 + val3)
-}).$.task(1, 1, 2, 3)(function (err, res) {
-    console.log('err', err, '\nres', res);
-})
+var fs = require("fs"),
+    path = require("path"),
+    files = [ "app.js", "demo.cs", "lambda.inq", "lambda.inq.js", "test.js", "test1.inq", "test1.inq.js" ];
 
-var wrap_test_3 = setTimeout.inq.task(0, 4000)(function () {
-    console.log('delayed!');
-})
-
-var errors = 0
-
-function error(callback) {
-    console.log('- try', errors);
-
-    setTimeout(function () {
-        callback(++errors)
-    }, 500)
-}
-
-var wrap_test_4 = error.inq().retry(5).fallback('ok')(function (err, res) {
-    console.log('err', err, '\nres', res);
-})
+var readFile = function(file, callback) { return setTimeout(function() { return fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback) }, 500) };
+inq(function* () {
+    var awaited = yield readFile.inq(files[0]);
+    console.log(awaited.toString());
+    console.log(files = files.map(function(file) { return readFile.inq(file) }));
+    awaited = yield* inq.series(files[0]);
+    console.log(awaited.toString());
+});
 
 //var p = $(function* () {
 ////    var self = this
