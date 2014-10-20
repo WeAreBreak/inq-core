@@ -67,18 +67,66 @@ var start = +new Date,
 //    cl('res', yield error.inq().retry(5).fallback('ok'))
 //}).error(cl.bind(cl, 'err'))
 
-var fs = require("fs"),
-    path = require("path"),
-    files = [ "app.js", "demo.cs", "lambda.inq", "lambda.inq.js", "test.js", "test1.inq", "test1.inq.js" ];
+//var fs = require("fs"),
+//    path = require("path"),
+//    files = [ "app.js", "demo.cs", "lambda.inq", "lambda.inq.js", "test.js", "test1.inq", "test1.inq.js" ];
+//
+//var readFile = function(file, callback) { return setTimeout(function() { return fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback) }, 500) };
+//inq(function* () {
+//    var awaited = yield readFile.inq(files[0]);
+//    console.log(awaited.toString());
+//    console.log(files = files.map(function(file) { return readFile.inq(file) }));
+//    awaited = yield* inq.series(files[0]);
+//    console.log(awaited.toString());
+//});
 
-var readFile = function(file, callback) { return setTimeout(function() { return fs.readFile(path.resolve(__dirname, "./files/" + file), { encoding: "utf8" }, callback) }, 500) };
-inq(function* () {
-    var awaited = yield readFile.inq(files[0]);
-    console.log(awaited.toString());
-    console.log(files = files.map(function(file) { return readFile.inq(file) }));
-    awaited = yield* inq.series(files[0]);
-    console.log(awaited.toString());
-});
+var i = 0
+
+function getRes(cb) {
+    setTimeout(function () {
+        cb(null, i++)
+    }, 500)
+}
+
+function getErr(cb) {
+    setTimeout(function () {
+        cb('fake alarm')
+    }, 500)
+}
+
+var p = $(function* () {
+    console.log(yield getRes.$());
+    console.log(yield getRes.$());
+    console.log(yield getRes.$());
+    console.log(yield getRes.$());
+
+    console.log(yield [
+        getRes.$(),
+        getRes.$(),
+        getRes.$(),
+        getRes.$(),
+        getRes.$()
+    ])
+
+    return yield* $.series([
+        getRes.$(),
+        getRes.$(),
+        getRes.$(),
+        getErr.$(),
+        getRes.$()
+    ])
+}).done(function (err, res) {
+    if(err)
+        console.log('err', err);
+    else
+        console.log('res', res);
+})
+
+setTimeout(function () {
+//    p.reject('fake alarm2') // force stop execution of an inq promise before it's finshed
+}, 1200)
+
+
 
 //var p = $(function* () {
 ////    var self = this
