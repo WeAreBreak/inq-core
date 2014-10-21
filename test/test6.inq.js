@@ -89,9 +89,10 @@ function getRes(cb) {
 }
 
 function getErr(cb) {
-    setTimeout(function () {
+    console.log('geterr');
+//    setTimeout(function () {
         cb('fake alarm')
-    }, 500)
+//    }, 500)
 }
 
 var p = $(function* () {
@@ -114,7 +115,10 @@ var p = $(function* () {
         getRes.$(),
         getRes.$(),
         getRes.$(),
-        getErr.$(),
+        getErr.$().retry(12.54321, function (i) {
+            console.log('try #' + i, '-', (+new Date - start) / 1000);
+            return i * 100
+        }),
         getRes.$()
     ])
 }).done(function (err, res) {
