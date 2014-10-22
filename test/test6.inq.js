@@ -84,28 +84,26 @@ var i = 0
 
 function getRes(cb) {
     setTimeout(function () {
-        if(i < 3)
+        if(i < 17)
             cb(null, i++)
         else
             cb('no more result :(')
-    }, 500)
+    }, 200)
 }
 
 function getErr(cb) {
     console.log('geterr');
     setTimeout(function () {
         cb('fake alarm')
-    }, 500)
+    }, 200)
 }
 
-require('inq')(function* () { console.log(yield (function(i) { return function (cb) { cb(null, Math.pow(2, i++)) } })(0).$().repeat(2).repeat(2).repeat(2)) })
-
 var p = $(function* () {
-    console.log(yield getRes.$().repeat(2).fallback(42).repeat(2).repeat(2));
-    console.log(yield (function(i) { return function (cb) { cb(null, Math.pow(2, i++)) } })(0).$().repeat(2).repeat(2).repeat(2));
+    console.log(yield getRes.$().repeat().fallback(42).repeat().repeat());
+    console.log(yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1));
 
-    console.log(yield getRes.$());
-    console.log(yield getRes.$());
+    console.log(yield getRes.$().retry(5).fallback(256).repeat(2));
+    console.log(yield getRes.$().fallback(21).repeat(function (res, i) { return res < 21 }));
     console.log(yield getRes.$());
     console.log(yield getRes.$());
 
