@@ -103,7 +103,7 @@ var p = $(function* () {
     console.log(yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1));
 
     console.log(yield getRes.$().retry(5).fallback(256).repeat(2));
-    console.log(yield getRes.$().fallback(21).repeat(function (res, i) { return res < 21 }));
+    console.log(yield getRes.$().fallback(21).repeat(function (i, res) { return res < 21 }));
     console.log(yield getRes.$());
     console.log(yield getRes.$());
 
