@@ -91,6 +91,17 @@ function getRes(cb) {
     }, 200)
 }
 
+function getResUnlimited(base, cb) {
+    if(arguments.length === 1) {
+        cb   = base
+        base = 0
+    }
+
+    setTimeout(function () {
+            cb(null, i++ + base)
+    }, 200)
+}
+
 function getErr(cb) {
     console.log('geterr');
     setTimeout(function () {
@@ -99,33 +110,34 @@ function getErr(cb) {
 }
 
 var p = $(function* () {
-    console.log(yield getRes.$().repeat().fallback(42).repeat().repeat());
-    console.log(yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1));
+    console.log((yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1)).join(',') + '\n');
 
+    console.log(yield getRes.$().timeout(10000).repeat().timeout(10000).fallback(42).timeout(10000).repeat().timeout(10000).repeat().timeout(10000));
     console.log(yield getRes.$().retry(5).fallback(256).repeat(2));
-    console.log(yield getRes.$().fallback(21).repeat(function (i, res) { return res < 21 }));
-    console.log(yield getRes.$());
-    console.log(yield getRes.$());
-
-    console.log(yield [
-        getRes.$(),
-        getRes.$(),
-        getRes.$(),
-        getRes.$(),
-        getRes.$()
-    ])
+    console.log(yield getRes.$().fallback(17).repeat(function (i, res) { return res < 17 }));
+    console.log(yield getRes.$().retry(15, 750).timeout(10000).fallback('fallback after timeout'));
 
     console.log(yield* $.series(i++));
 
+    console.log(yield getRes.$().fallback('alive'));
+
+    console.log(yield [
+        getResUnlimited.$(),
+        getResUnlimited.$(),
+        getResUnlimited.$(),
+        getResUnlimited.$(),
+        getResUnlimited.$()
+    ])
+
     return yield* $.series([
-        getRes.$(),
-        getRes.$(),
-        getRes.$(),
-        getErr.$().retry(12.54321, function (i) {
+        getResUnlimited.$(),
+        getResUnlimited.$(),
+        getResUnlimited.$(),
+        getRes.$().retry(12.54321, function (i) {
             console.log('try #' + i, '-', (+new Date - start) / 1000);
             return i * 100
-        }),
-        getRes.$()
+        }).fallback(26),
+        getResUnlimited.$(1)
     ])
 }).done(function (err, res) {
     if(err)
@@ -135,8 +147,8 @@ var p = $(function* () {
 })
 
 setTimeout(function () {
-//    p.reject('fake alarm2') // force stop execution of an inq promise before it's finshed
-}, 1200)
+//    p.reject('terminated') // force stop execution of an inq promise before it's finshed
+}, 5000)
 
 
 
