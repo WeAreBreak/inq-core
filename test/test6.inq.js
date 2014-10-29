@@ -110,9 +110,9 @@ function getErr(cb) {
 }
 
 var p = $(function* () {
-    console.log((yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1)).join(',') + '\n');
+//    console.log((yield (function(n) { return function (cb) { cb(null, Math.pow(2, n++)) } })(0).$().repeat(3).repeat(2).repeat(1)).join(',') + '\n');
 
-    console.log(yield getRes.$().timeout(10000).repeat().timeout(10000).fallback(42).timeout(10000).repeat().timeout(10000).repeat().timeout(10000));
+    console.log(yield getRes.$().repeat().fallback(42).repeat().repeat());
     console.log(yield getRes.$().retry(5).fallback(256).repeat(2));
     console.log(yield getRes.$().fallback(17).repeat(function (i, res) { return res < 17 }));
     console.log(yield getRes.$().retry(15, 750).timeout(10000).fallback('fallback after timeout'));
@@ -146,9 +146,9 @@ var p = $(function* () {
         console.log('res', res);
 })
 
-setTimeout(function () {
+//setTimeout(function () {
 //    p.reject('terminated') // force stop execution of an inq promise before it's finshed
-}, 5000)
+//}, 5000)
 
 
 
