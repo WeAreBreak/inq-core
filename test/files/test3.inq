@@ -25,4 +25,4 @@ function* saveResultsForUser(id) {
     return await* saveFile(username, await* getData(username))
 }
 
-* console.log(await* saveResultsForUser(1234)); // Output: './<username>.txt'
+* { console.log(await* saveResultsForUser(1234)) }; // Output: './<username>.txt'
