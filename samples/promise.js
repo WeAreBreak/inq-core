@@ -38,10 +38,12 @@ function* parallel() {
     console.log(yield [ p1, p2 ])
 }
 
-$(series).done(function (err, res) {
-    console.log('done series', err, res)
+$(series).then(function (res) {
+    console.log('done series', res)
+}, function (err) {
+    console.log('error series', err)
 
-    $(parallel).done(function (err, res) {
-        console.log('done parallel', err, res)
+    $(parallel).then(function (res) {
+        console.log('done parallel', res)
     })
 })
