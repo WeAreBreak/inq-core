@@ -1,11 +1,8 @@
 {
   "name": "inq",
-  "version": "0.0.5",
+  "version": "0.1.9",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "engines": {
       "node": ">= 0.11.13"
   },
@@ -19,8 +16,5 @@
       "name": "Schwarzkopf Balazs",
       "email": "schwarzkopfb@icloud.com"
   },
-  "files": [
-      "lib"
-  ],
   "license": "MIT"
 }

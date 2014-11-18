@@ -51,7 +51,10 @@ describe('exposition', function () {
     it('noConflict', function () {
         $.noConflict()
 
-        assert(!$,    'global.$ should not exist')
+        assert.throws(function () {
+            return $
+        }, ReferenceError, 'global.$ should not exist')
+
         assert(inq,   'global.inq should exist')
         assert(![].$,  'Array.prototype.$ should not exist')
         assert([].inq, 'Array.prototype.inq should exist')
