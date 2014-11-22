@@ -9,7 +9,7 @@ var fs = require('fs')
 $(function* () {
     var query,
         nums  = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-        files = [ 'chain.js', 'query.js', 'this.js', 'yield.js' ]
+        files = [ 'chain.js', 'query.js', 'nonexisting.file', 'this.js', 'yield.js' ]
 
     //query = $
     //    .from(nums)
@@ -33,6 +33,9 @@ $(function* () {
         .map(function (item) {
             return __dirname + '/' + item
         })
+        .filter(function* (path) {
+           return yield fs.exists.$.pass(path)
+        })
         .map(function* (file) {
             return yield fs.readFile.$(file, { encoding: 'utf8' })
         })
@@ -41,4 +44,5 @@ $(function* () {
         })
 
     console.log(yield query.exec());
+    console.log(yield $.from("inq").first().exec());
 })
