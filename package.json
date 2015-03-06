@@ -1,10 +1,10 @@
 {
-  "name": "inq",
+  "name": "inq-core",
   "version": "0.1.9",
-  "description": "",
+  "description": "Superpretty, ES7 Generators based control-flow framework with some extra sugar. Basically it's co + async and some other goodness, but doesn't require you to use \"thunkified\" wrapper libraries like mz.",
   "main": "index.js",
   "engines": {
-      "node": ">= 0.11.13"
+    "node": ">= 0.11.13"
   },
   "devDependencies": {
     "mocha": "^2.0.1"
@@ -12,9 +12,27 @@
   "scripts": {
     "test": "mocha --harmony ./test"
   },
-  "author": {
-      "name": "Schwarzkopf Balazs",
-      "email": "schwarzkopfb@icloud.com"
+  "author": "Schwarzkopf Balazs <schwarzkopfb@we-are-break.com>",
+  "license": "MIT",
+  "directories": {
+    "test": "test"
   },
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WeAreBreak/inq-core"
+  },
+  "keywords": [
+    "inq",
+    "async",
+    "task",
+    "co",
+    "await",
+    "parallel",
+    "callback",
+    "wait"
+  ],
+  "bugs": {
+    "url": "https://github.com/WeAreBreak/inq-core/issues"
+  },
+  "homepage": "https://github.com/WeAreBreak/inq-core"
 }
