@@ -1,6 +1,6 @@
 {
   "name": "inq-core",
-  "version": "0.1.9",
+  "version": "0.1.91",
   "description": "Superpretty, ES7 Generators based control-flow framework with some extra sugar. Basically it's co + async and some other goodness, but doesn't require you to use \"thunkified\" wrapper libraries like mz.",
   "main": "index.js",
   "engines": {
